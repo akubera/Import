@@ -21,21 +21,24 @@ class Importer:
     def __getattr__(self, mod_name):
         """
         Allows access to an 'attribute' of the module. This really allows
-        another script to call the importer via ``Import. XXX``.
+        another script to call the importer via ``Import. AAA``.
         """
-
-        log.debug("importing:", mod_name)
+        print("importing:", mod_name)
         e = None
         try:
-            sys.modules[mod_name] = __import__(mod_name)
+            __import__(mod_name)
+            sys.modules[mod_name] =
+            print("Imported", mod_name, "successfully")
         except ImportError as E:
             e = E
         except Exception as E:
             e = E
+            log.debug("Error importing '%s': %s" % (mod_name, E))
         else:
             return
 
-        log.info('error', e)
+        print('error', e)
+
 
 
 sys.modules[__name__] = Importer()
